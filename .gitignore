@@ -1,3 +1,4 @@
-/target
+**/target
+**/parser_derive/target/**
 *.txt
 *.json
