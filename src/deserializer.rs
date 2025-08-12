@@ -198,3 +198,6 @@ impl<'a> Parser<'a> {
         Ok(JsonVal::Object(map))
     }
 }
+
+#[cfg(test)]
+mod tests {}

@@ -45,37 +45,37 @@ impl JsonVal {
     }
 
     pub fn get_string(&self, key: &str) -> Option<String> {
-        if let JsonVal::Object(map) = self {
-            if let Some(JsonVal::String(s)) = map.get(key) {
-                return Some(s.clone());
-            }
+        if let JsonVal::Object(map) = self
+            && let Some(JsonVal::String(s)) = map.get(key)
+        {
+            return Some(s.clone());
         }
         None
     }
 
     pub fn get_number(&self, key: &str) -> Option<usize> {
-        if let JsonVal::Object(map) = self {
-            if let Some(JsonVal::Number(n)) = map.get(key) {
-                return Some(*n);
-            }
+        if let JsonVal::Object(map) = self
+            && let Some(JsonVal::Number(n)) = map.get(key)
+        {
+            return Some(*n);
         }
         None
     }
 
     pub fn get_float(&self, key: &str) -> Option<f64> {
-        if let JsonVal::Object(map) = self {
-            if let Some(JsonVal::Number(f)) = map.get(key) {
-                return Some(*f as f64);
-            }
+        if let JsonVal::Object(map) = self
+            && let Some(JsonVal::Number(f)) = map.get(key)
+        {
+            return Some(*f as f64);
         }
         None
     }
 
     pub fn get_bool(&self, key: &str) -> Option<bool> {
-        if let JsonVal::Object(map) = self {
-            if let Some(JsonVal::Bool(b)) = map.get(key) {
-                return Some(*b);
-            }
+        if let JsonVal::Object(map) = self
+            && let Some(JsonVal::Bool(b)) = map.get(key)
+        {
+            return Some(*b);
         }
         None
     }
@@ -92,6 +92,17 @@ pub struct GitBlob {
     pub action: String,
     pub merge_commit_sha: String,
     pub repo: Repo,
+    #[json(rename = "created_at")]
+    pub created_at: String,
+}
+
+impl GitBlob {
+    pub fn print(&self) {
+        println!(
+            "Id: {}, Action: {}, Commit Sha: {}, repo: {:?}, created_at: {}",
+            self.id, self.action, self.merge_commit_sha, self.repo, self.created_at
+        );
+    }
 }
 
 #[derive(Debug, FromJsonVal, Default)]
@@ -99,4 +110,14 @@ pub struct Repo {
     pub id: usize,
     pub name: String,
     pub url: String,
+}
+
+pub fn parse_blobs<T: FromJsonVal>(val: &JsonVal) -> Vec<T> {
+    if let JsonVal::Array(arr) = val {
+        arr.iter()
+            .filter_map(|item| T::from_json(item).ok())
+            .collect()
+    } else {
+        vec![]
+    }
 }
