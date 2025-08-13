@@ -6,3 +6,6 @@ run-lg:
 
 run-md:
 	make build && ./target/release/parser ./large-file.json
+
+run:
+	make build && ./target/release/parser 
