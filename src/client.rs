@@ -24,7 +24,7 @@ impl User {
     }
 }
 
-pub fn req_json(url: Option<String>) -> std::io::Result<User> {
+pub async fn req_json(url: Option<String>) -> std::io::Result<User> {
     let url = url.unwrap_or_else(|| OTHER_URL.to_string());
 
     let no_scheme = url.strip_prefix("http://").unwrap_or(&url);
